@@ -1,8 +1,10 @@
 FROM ubuntu:22.04
 
+# Run this using `docker build --memory=16g -t ns3.43-gym:latest .`
 ENV DEBIAN_FRONTEND=noninteractive
 # 为了避免失败，要加大内存至10GB以上。
 # 更新并安装必要的软件包
+
 RUN apt-get update && apt-get install -y \
     g++ \
     tar \
