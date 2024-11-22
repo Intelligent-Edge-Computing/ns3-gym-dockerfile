@@ -27,8 +27,7 @@ mv dockerfiles/.* ./
 Before building the Docker image, make sure you have directory named `${HOST_WORKSPACE_PATH}`.
 
 ```bash
-docker-compose build ns3-service --progress=plain # generate an image named "ns3.43-gym:latest"
-
+docker-compose build ns3-service --progress=plain # generate an image named "ns3.43-gym:latest", using --progress to see what is exactly happening.
 ```
 
 ## 4. Run Docker Container using docker-compose

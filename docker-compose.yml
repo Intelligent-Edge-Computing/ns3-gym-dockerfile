@@ -6,13 +6,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        HOST_WORKSPACE_PATH: /data1/data_1/jp/workspace  # 与宿主机路径一致
     image: ns3.43-gym:latest  # 构建后镜像的名称和标签
 
   ns3-app:
     image: ns3.43-gym:latest  # 使用上面构建的镜像
     container_name: ai-comm-net-ns3.43-gym  # 容器名称
+    hostname: ns3node
     volumes:
       - /data1/data_1/jp/workspace:/data1/data_1/jp/workspace  # 挂载宿主机目录到容器, 保持一致，避免奇怪的编译错误
       - /etc/localtime:/etc/localtime:ro  # 挂载宿主机的时间配置

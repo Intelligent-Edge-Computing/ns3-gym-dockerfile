@@ -2,7 +2,6 @@ FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 # 为了避免失败，要加大内存至10GB以上。
-WORKDIR ${HOST_WORKSPACE_PATH}
 RUN pwd
 RUN apt-get update && apt-get install -y \
     g++ \
@@ -61,7 +60,8 @@ RUN apt-get update && apt-get install -y \
     libsqlite3-dev \
     libxml2 \
     libxml2-dev \
-    libboost-all-dev
+    libboost-all-dev \
+    openssh-server
 
 # 更新 pip 到最新版本
 RUN python3 -m pip install --upgrade pip
@@ -71,22 +71,3 @@ RUN python3 -m pip install cppyy -i https://pypi.tuna.tsinghua.edu.cn/simple --v
 
 #fix for "strip_trailing_zero" error
 RUN python3 -m pip install --upgrade packaging
-
-# 设置工作目录
-#WORKDIR /workspace
-ENV HOST_WORKSPACE_PATH=/workspace
-#ADD ${ENV_HOST_WORKSPACE_PATH} /workspace
-
-# 切换到 ns-3 的工作目录
-#WORKDIR /workspace/ns-3
-# 配置和构建 ns-3
-#RUN ./ns3 configure --enable-examples --enable-python-bindings
-#RUN ./ns3 build
-
-# 安装 ns3-gym
-#WORKDIR /workspace/ns-3/contrib/opengym
-#RUN python3 -m pip install --user ./model/ns3gym
-
-#COPY --from=builder /workspace ${ENV_HOST_WORKSPACE_PATH}
-# VOLUME ["/workspace"]
-WORKDIR ${HOST_WORKSPACE_PATH}
