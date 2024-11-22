@@ -1,9 +1,7 @@
 FROM ubuntu:22.04
 
-# Run this using `docker build --memory=16g -t ns3.43-gym:latest .`
 ENV DEBIAN_FRONTEND=noninteractive
 # 为了避免失败，要加大内存至10GB以上。
-# 更新并安装必要的软件包
 
 RUN apt-get update && apt-get install -y \
     g++ \
@@ -71,28 +69,22 @@ RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install cppyy -i https://pypi.tuna.tsinghua.edu.cn/simple --verbose
 
 # 设置工作目录
-WORKDIR /workspace
+#WORKDIR /workspace
+#ENV HOST_WORKSPACE_PATH=/workspace
+#ADD ${ENV_HOST_WORKSPACE_PATH} /workspace
 
-# 从 GitLab 克隆 ns-3 并切换到特定 tag，创建 release 分支
-RUN git clone https://gitlab.com/nsnam/ns-3-dev.git ns-3
-WORKDIR /workspace/ns-3
-RUN git checkout ns-3.42 && git checkout -b ns-3.42-release
-
-# 从 GitHub 克隆 ns3-gym
-WORKDIR /workspace/ns-3/contrib
-#RUN git clone  https://github.com/qijianpeng/ns3.42-gym.git ./opengym
-RUN git clone -b app-ns-3.42  https://github.com/rogerio-silva/ns3-gym.git ./opengym
-WORKDIR /workspace/ns-3/opengym
-
+# 切换到 ns-3 的工作目录
+#WORKDIR /workspace/ns-3
 # 配置和构建 ns-3
-WORKDIR /workspace/ns-3
-RUN ./ns3 configure --enable-examples --enable-python-bindings
-RUN ./ns3 build
+#RUN ./ns3 configure --enable-examples --enable-python-bindings
+#RUN ./ns3 build
 
 # 安装 ns3-gym
-WORKDIR /workspace/ns-3/contrib/opengym
+#WORKDIR /workspace/ns-3/contrib/opengym
 #fix for "strip_trailing_zero" error
-RUN python3 -m pip install --upgrade packaging
-RUN python3 -m pip install --user ./model/ns3gym
+#RUN python3 -m pip install --upgrade packaging
+#RUN python3 -m pip install --user ./model/ns3gym
 
+#COPY --from=builder /workspace ${ENV_HOST_WORKSPACE_PATH}
+VOLUME ["/workspace"]
 WORKDIR /workspace/ns-3
