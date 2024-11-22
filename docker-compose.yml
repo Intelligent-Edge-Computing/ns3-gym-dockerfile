@@ -1,4 +1,4 @@
-version: '3.9'
+# version: '3.9'
 # Run this file using `docker-compose up -d`, which starts the container in the background.
 
 services:
@@ -6,23 +6,21 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      # args:
-        # HOST_WORKSPACE_PATH: /data1/data_1/jp/workspace  # 与宿主机路径一致
+      args:
+        HOST_WORKSPACE_PATH: /data1/data_1/jp/workspace  # 与宿主机路径一致
     image: ns3.43-gym:latest  # 构建后镜像的名称和标签
-    # volumes:
-      # - /data1/data_1/jp/workspace:/workspace  # 挂载宿主机目录到容器内的 /workspace
 
   ns3-app:
     image: ns3.43-gym:latest  # 使用上面构建的镜像
     container_name: ai-comm-net-ns3.43-gym  # 容器名称
     volumes:
-      - /data1/data_1/jp/workspace:/workspace  # 挂载宿主机目录到容器
+      - /data1/data_1/jp/workspace:/data1/data_1/jp/workspace  # 挂载宿主机目录到容器, 保持一致，避免奇怪的编译错误
       - /etc/localtime:/etc/localtime:ro  # 挂载宿主机的时间配置
       - /etc/timezone:/etc/timezone:ro    # 挂载宿主机的时区文件
     ports:
       - "7777:22"  # 端口映射：宿主机的 7777 映射到容器的 22
-    # environment:
-      # - HOST_WORKSPACE_PATH=/data1/data_1/jp/workspace  # 设置环境变量
+    environment:
+      - HOST_WORKSPACE_PATH=/data1/data_1/jp/workspace  # 设置环境变量
     command: ["/bin/bash", "-c", "echo 'Hello, AI for Communication Networking'; tail -f /dev/null"]  # 保持容器后台运行
     deploy:
       resources:
