@@ -1,6 +1,6 @@
 # Operations on your remote server
-This way will let you sync your local codes with your remote server, and run your 
-codes on your remote server, i.e., remote server just provides a pure compile and 
+This way will let you send (sync) your local machine codes to your remote server, and run your 
+codes on your remote server, i.e., remote server provides a pure compile and 
 runtime environment.
 
 ## 1. Install Docker
@@ -25,7 +25,8 @@ service ssh start # start ssh service, used in Remote Development in CLion
 ```
 
 # Operations on local machine
-## 1. Download codes
+## Download codes
+You don't need to compile the codes, because remote server will do it.
 
 ```bash
 # 1. clone ns-3
