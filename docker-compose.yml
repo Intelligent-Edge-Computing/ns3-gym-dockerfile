@@ -6,6 +6,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        HOST_WORKSPACE_PATH: /data1/data_1/jp/workspace  # 与宿主机路径一致
+        ROOT_PASSWORD: password # 设置root用户密码
     image: ns3.43-gym:latest  # 构建后镜像的名称和标签
 
   ns3-app:
@@ -20,6 +23,7 @@ services:
       - "7777:22"  # 端口映射：宿主机的 7777 映射到容器的 22
     environment:
       - HOST_WORKSPACE_PATH=/data1/data_1/jp/workspace  # 设置环境变量
+
     command: ["/bin/bash", "-c", "echo 'Hello, AI for Communication Networking'; tail -f /dev/null"]  # 保持容器后台运行
     deploy:
       resources:

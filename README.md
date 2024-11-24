@@ -1,20 +1,24 @@
 # ns3-gym-dockerfile
 NO responsibilities for any issues.
+
+Bellow is developing and running codes using CLion Remote Development Gateway. 
+Another way is Remote Hosts, which could be found in [Remote with local sources](ns3-gym-CLion-Remote.md).
 ## 1. Install Docker
 Check [ubuntu_macos_docker_installation](ubuntu_macos_docker_installation.md)
 
 ## 2. Download codes
-Suppose your are in `/data1/data_1/jp/workspace`
+Suppose you are in `/data1/data_1/jp/workspace`
 
 ```bash
 export HOST_WORKSPACE_PATH=/data1/data_1/jp/workspace
 cd ${HOST_WORKSPACE_PATH}
 # 1. clone ns-3
 git clone https://gitlab.com/nsnam/ns-3-dev.git ns-3
+cd ns-3
 git checkout ns-3.42 && git checkout -b ns-3.42-release
 
 # 2. clone ns3-gym
-cd ns-3/contrib/
+cd ${HOST_WORKSPACE_PATH}/ns-3/contrib/
 git clone -b app-ns-3.42  https://github.com/rogerio-silva/ns3-gym.git ./opengym
 
 # 3. clone ns3-gym-docker
@@ -34,8 +38,7 @@ docker-compose build ns3-service --progress=plain # generate an image named "ns3
 ```bash
 docker-compose up ns3-app -d
 docker-compose exec -it ns3-app bash # enter the container
-#kill
-docker-compose kill ns3-app # stop the container
+service ssh start # start ssh service
 ```
 
 ## 5. Compile ns-3 and ns3-gym
@@ -55,6 +58,9 @@ cd ${HOST_WORKSPACE_PATH}/ns-3
 cd ${HOST_WORKSPACE_PATH}/ns-3/contrib/opengym
 python3 -m pip install --user ./model/ns3gym
 ```
+
+## 6. Developing with CLion
+Check [Remote Development Gateway](https://www.jetbrains.com/help/clion/2024.2/remote-development-a.html?remote.development.launch.gateway#gateway)
 
 Enjoy!
 ---

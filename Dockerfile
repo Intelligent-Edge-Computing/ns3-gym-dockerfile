@@ -2,7 +2,6 @@ FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 # 为了避免失败，要加大内存至10GB以上。
-RUN pwd
 RUN apt-get update && apt-get install -y \
     g++ \
     tar \
@@ -61,7 +60,8 @@ RUN apt-get update && apt-get install -y \
     libxml2 \
     libxml2-dev \
     libboost-all-dev \
-    openssh-server
+    rsync \
+    xinetd
 
 # 更新 pip 到最新版本
 RUN python3 -m pip install --upgrade pip
@@ -71,3 +71,12 @@ RUN python3 -m pip install cppyy -i https://pypi.tuna.tsinghua.edu.cn/simple --v
 
 #fix for "strip_trailing_zero" error
 RUN python3 -m pip install --upgrade packaging
+RUN apt-get install -y openssh-server && mkdir /var/run/sshd
+ARG ROOT_PASSWORD
+RUN echo ${ROOT_PASSWORD}
+RUN echo root:${ROOT_PASSWORD} | chpasswd
+RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
+
+# other tools you may want to use.
+RUN apt-get install -y vim
