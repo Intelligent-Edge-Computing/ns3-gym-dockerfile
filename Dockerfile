@@ -72,7 +72,7 @@ RUN python3 -m pip install cppyy -i https://pypi.tuna.tsinghua.edu.cn/simple --v
 #fix for "strip_trailing_zero" error
 RUN python3 -m pip install --upgrade packaging
 RUN apt-get install -y openssh-server && mkdir /var/run/sshd
-ARG ROOT_PASSWORD
+ARG ROOT_PASSWORD=password
 RUN echo ${ROOT_PASSWORD}
 RUN echo root:${ROOT_PASSWORD} | chpasswd
 RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
