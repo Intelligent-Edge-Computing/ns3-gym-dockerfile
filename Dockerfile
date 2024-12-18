@@ -90,8 +90,6 @@ RUN python3 -m pip install stable-baselines3
 RUN python3 -m pip uninstall -y numpy scipy
 RUN python3 -m pip install numpy==1.24.4 scipy
 
-RUN apt-get install -y export 
-
 # Accept build argument for the aoi password
 ARG AOI_PASSWORD=password
 # Create user 'aoi' and set up password
