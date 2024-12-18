@@ -7,30 +7,37 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        HOST_WORKSPACE_PATH: /data1/data_1/jp/workspace  # 与宿主机路径一致
-        ROOT_PASSWORD: password # 设置root用户密码
-    image: ns3.43-gym:latest  # 构建后镜像的名称和标签
-
+        ROOT_PASSWORD: "password"
+        AOI_PASSWORD: "password"
+    image: ns3.43-gym-sb3-rs:latest  # 构建后镜像的名称和标签
+    deploy:
+      resources:
+        limits:
+          memory: 16g       # 设置最大内存为 10GB
+          cpus: "8.0"       # 设置最大 CPU 核心数为 4 核
+        reservations:
+          memory: 8g        # 设置保留内存为 8GB
+          cpus: "2.0"       # 设置保留 CPU 核心数为 2 核
   ns3-app:
-    image: ns3.43-gym:latest  # 使用上面构建的镜像
-    container_name: ai-comm-net-ns3.43-gym  # 容器名称
-    hostname: ns3node
+    image: ns3.43-gym-sb3-rs:latest  # 使用上面构建的镜像
+    container_name: ai-comm-net-ns3.43-gym-rs  # 容器名称
+    hostname: ns3node-rs
     volumes:
-      - /data1/data_1/jp/workspace:/data1/data_1/jp/workspace  # 挂载宿主机目录到容器, 保持一致，避免奇怪的编译错误
-      - /etc/localtime:/etc/localtime:ro  # 挂载宿主机的时间配置
-      - /etc/timezone:/etc/timezone:ro    # 挂载宿主机的时区文件
+      - /Users/qijianpeng/git/ns3/remote-ns3/workspace:/workspace  # 挂载宿主机目录到容器, 数据持久化。远程开发目录填写/workspace/ns-3路径
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
     ports:
-      - "7777:22"  # 端口映射：宿主机的 7777 映射到容器的 22
-    environment:
-      - HOST_WORKSPACE_PATH=/data1/data_1/jp/workspace  # 设置环境变量
+      - "8888:22"  # 端口映射：宿主机的 7777 映射到容器的 22，提供远程连接
 
     command: ["/bin/bash", "-c", "echo 'Hello, AI for Communication Networking'; tail -f /dev/null"]  # 保持容器后台运行
     deploy:
       resources:
         limits:
-          memory: 16g  # 限制最大内存为 16GB
-          cpus: "10.0"  # 限制最大 CPU 使用 10 核
-
+          memory: 12g  # 限制最大内存为 10GB
+          cpus: "4.0"  # 限制最大 CPU 使用 4 核
+    environment:
+      - TZ=Asia/Shanghai
+      - SUDO_PASSWORD=password
 volumes:
   workspace_data:
     driver: local

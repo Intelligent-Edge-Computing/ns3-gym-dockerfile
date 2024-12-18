@@ -13,11 +13,10 @@ if ! docker compose ps | grep -q "ns3-app"; then
 fi
 
 # 在 ns3-app 容器中启动 SSH 服务并安装 Python 包
-docker compose exec ns3-app sh -c "
-    sudo service ssh start &&
+docker-compose exec ns3-app sh -c "
     cd /workspace/ns-3/contrib/opengym &&
     python3 -m pip install --user ./model/ns3gym
 "
 
 # 提示完成
-echo "ns3-app started and ns3gym package installed in ns3-app."
+echo "ns3gym package installed in ns3-app."

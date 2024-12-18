@@ -61,7 +61,8 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     libboost-all-dev \
     rsync \
-    xinetd
+    xinetd \
+    sudo
 
 # 更新 pip 到最新版本
 RUN python3 -m pip install --upgrade pip
@@ -79,4 +80,26 @@ RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/
 RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
 
 # other tools you may want to use.
-RUN apt-get install -y vim
+RUN apt-get update && apt-get install -y vim
+RUN python3 -m pip install tensorflow
+RUN python3 -c "import sympy; print(sympy.__file__)" | xargs -I {} sh -c 'rm -rf $(dirname "{}")'
+RUN rm -rf /usr/lib/python3/dist-packages/sympy-1.9.egg-info
+RUN python3 -m pip install torch torchvision
+RUN python3 -m pip install gymnasium
+RUN python3 -m pip install stable-baselines3
+RUN python3 -m pip uninstall -y numpy scipy
+RUN python3 -m pip install numpy==1.24.4 scipy
+
+RUN apt-get install -y export 
+
+# Accept build argument for the aoi password
+ARG AOI_PASSWORD=password
+# Create user 'aoi' and set up password
+RUN echo "aoi:${AOI_PASSWORD}" 
+RUN useradd -m aoi && echo "aoi:${AOI_PASSWORD}" | chpasswd
+# Add 'aoi' to sudoers (optional, if you need sudo access for 'aoi')
+RUN usermod -aG sudo aoi
+# Set default user as 'aoi' (this makes 'aoi' the default user for the container)
+USER aoi
+# Set working directory
+WORKDIR /workspace
