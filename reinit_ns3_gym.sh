@@ -15,6 +15,7 @@ fi
 # 在 ns3-app 容器中启动 SSH 服务并安装 Python 包
 docker-compose exec ns3-app sh -c "
     cd /workspace/ns-3/contrib/opengym &&
+    python3 -m pip uninstall -y  ns3gym &&
     python3 -m pip install --user ./model/ns3gym
 "
 
