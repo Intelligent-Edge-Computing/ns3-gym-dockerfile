@@ -110,9 +110,10 @@ python3 -m pip install --user ./model/ns3gym
 
 # 3. 配置 CLion 和 PyCharm
 
-完成Remote with local sources 配置，具体参考 [JetBrains 官方指南](https://www.jetbrains.com/help/clion/remote-projects-support.html#deployment-entry)。
+完成Remote with local sources 配置，具体参考 [JetBrains 官方指南](https://www.jetbrains.com/help/clion/remote-projects-support.html#deployment-entry)。IP 、PORT 应当填写运行起来的docker容器的ip和暴露的PORT （在docker-compose.yml 中有写）。
 
-注意，IP 、PORT 应当填写运行起来的docker容器的ip和暴露的PORT （在docker-compose.yml 中有写）。
+**本地运行docker特别提醒**：想要共享目录、数据，Deploment在配置时一定要选择`Local or mounted folder`，否则你改了代码，就会立刻传到容器，出现内容被覆盖、删除的情况。
+
 
 ⚠️ CLion 暂不支持 Python 的远程开发，因此使用PyCharm单独对ns3-gym 进行开发。
 
